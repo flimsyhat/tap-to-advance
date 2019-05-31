@@ -136,7 +136,7 @@
       else {
         if (finalFrame) {removeSlider();}
         video.pause();
-        video.currentTime = key[frame + step].time;
+        video.currentTime = 5;
         frame += framechange;
         window.requestAnimationFrame(onTimeUpdate);
       }
@@ -213,14 +213,16 @@
     // Full screen on mobile
     //      - detect if on mobile
     //      - if so, do something
+    // Bleed areas on mobile -- video should bleed over visible area, but buttons are always sized to the screen
     // touching and holding initiates carosel navigation (with video thumbnails) - scrolling left and right scrolls through frames. single tap on frame selects as current frame
     // help menu that has animations for all behaviors -- tap to advance/replay, double tap to skip ahead/back, hold to initiate carosel
     
     // PROBLEMS
-    // Double tap to zoom on mobile sometimes fires
     // Delay when skipping time in video....(on mobile)
+    // Double tap to zoom on mobile sometimes fires
     
     //MAyBE
+    // have show frame number, pagination indicator (with circles), something
     // on tap, confirm action with < or > symbol fading in. Confirm double tap with |< or >| fading in
   </script>
 </body>
