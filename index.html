@@ -12,8 +12,10 @@
       box-shadow: 0 80px 100px 0px rgba(88, 88, 88, 0.87);
     }
     .top {
+/*
       top: -25%;
       right: 10%;
+*/
       height: 640px;
       width: 360px;
     }
@@ -61,8 +63,9 @@
 </head>
 <body class="w-100 center black-90 bg-white f5-ns f6 relative pa2 pa0-ns sans-serif">
   <div class="center w-100 dt-ns vh-100-ns">
-    <div class="dtc-ns v-mid relative">
-      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">
+    <div class="dtc-nsrelative">
+<!--      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">-->
+      <div>
         <div class="relative w5 h5 bg-black top overflow-hidden">
           <video muted playsinline preload="auto" class="w-100 absolute" id="video">
             <source src="test.webm" type="video/webm" />
@@ -205,6 +208,9 @@
 //    }
     
     // TODO
+    // Fix tap actions -- detect if single or double tap, then act accordingly
+    // Block actions until video is loaded
+    // Progressively load video (don't block beginning if not loaded)
     // Full screen on mobile
     //      - detect if on mobile
     //      - if so, do something
