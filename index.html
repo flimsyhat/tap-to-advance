@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html lang = "en">
+<head>
+  <title>cFrame</title>
+  <meta charset = "UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="tachyons.css">
+  <style>
+    .large-shadow {
+      box-shadow: 0 80px 100px 0px rgba(88, 88, 88, 0.87);
+    }
+    .top {
+      top: -25%;
+      right: 10%;
+      height: 640px;
+      width: 360px;
+    }
+    .bottom {
+      height: 480px;
+      width: 300px;
+    }
+    #replay-bar {
+    height: 75px;
+    transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    }
+    .slide-in {
+      animation: slide-in 0.5s forwards;
+      -webkit-animation: slide-in 0.5s forwards;
+    }
+    @keyframes slide-in {
+        100% { transform: translateY(0%); }
+    }
+    @-webkit-keyframes slide-in {
+        100% { -webkit-transform: translateY(0%); }
+    }
+    .click-region {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+    }
+    .right {
+      right:0px;
+      top: 0px;
+    }
+    .left {
+      left:0px;
+      top: 0px;
+    }
+    .button-right {
+      transform: translateX(50%);
+    }
+    .button-left {
+      transform: translateX(-50%);
+    }
+    .click-region {opacity: 0}
+    .click-region:hover {opacity: 1}
+  </style>
+</head>
+<body class="w-100 center black-90 bg-white f5-ns f6 relative pa2 pa0-ns sans-serif">
+  <div class="center w-100 dt-ns vh-100-ns">
+    <div class="dtc-ns v-mid relative">
+      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">
+        <div class="relative w5 h5 bg-black top overflow-hidden">
+          <video muted playsinline preload="auto" class="w-100 absolute" id="video">
+            <source src="test.webm" type="video/webm" />
+            <source src="test.mp4" type="video/mp4" />
+          </video>
+          <div class="click-region right" onclick="advanceFrame(1);">
+            <div class="flex items-center h-100 fr">
+              <div class="bg-white h3 w3 br-100 button-right">
+                <p class="w-100 tl pl2 f4">→</p>
+              </div>
+            </div>
+          </div>
+          <div class="click-region left" onclick="decrementFrame();">
+            <div class="flex items-center h-100 fl">
+              <div class="bg-white h3 w3 br-100 button-left">
+                <p class="w-100 tr pr2 f4">←</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 absolute tc bottom-0" id="replay-bar">
+            <a class="f5 link dim ph4 br4 pv3 mb2 dib black relative bottom-0 bg-white shadow-3 ma2 ba b--gray fw3" href="#0" onclick="sliderClicked();"><span class=" relative" style="bottom:-2px;">↩</span> Back to start</a>
+          </div>
+        <p class="white f6 ma1 absolute w-100"><span class="b">c</span>Frame</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    
+    var video = document.getElementById('video');
+    var replay_bar = document.getElementById('replay-bar');
+
+    var key = [
+      {time: 0, type: "hold"},
+      {time: 1, type: "hold"},
+      {time: 2, type: "hold"},
+      {time: 3, type: "hold"},
+      {time: 4, type: "hold"},
+      {time: 5, type: "hold"}
+    ]
+
+    var frame = 0;
+    var ended = false;
+    
+    const advanceFrame = () => {
+//      if (video.playing) {return;}
+      if (!inRange(frame)) {return;} // break if outside frame range
+      else {
+        let step = 1;
+        if (video.playing) {
+          video.pause();
+          video.currentTime = key[frame].time;
+          window.requestAnimationFrame(onTimeUpdate);
+        }
+        else {frame += step;}
+      }
+    }
+    
+    const decrementFrame = () => {
+      let step = -1;
+      let framechange = 0;
+      if (video.playing) {
+//        step = -2;
+        framechange = -1;
+      }
+      if (!inRange(frame + step)) {
+        return;
+      }
+      else {
+        if (finalFrame) {removeSlider();}
+        video.pause();
+        video.currentTime = key[frame + step].time;
+        frame += framechange;
+        window.requestAnimationFrame(onTimeUpdate);
+      }
+    }
+    
+    const finalFrame = () => {
+      if (frame == key.length - 1) {return true;}
+      else {return false;}
+    }
+    
+    const firstFrame = () => {
+      if (frame == 0) {return true;}
+      else {return false;}
+    }
+    
+    const inRange = (f) => {
+      if (f <= key.length && f >= 0) {return true;}
+      else {return false;}
+    }
+    
+    const onTimeUpdate = () => {
+        if (video.currentTime >= (key[frame].time - 0.05)) {
+          video.pause();
+          if (finalFrame()){handleEnd()}
+          window.requestAnimationFrame(onTimeUpdate);
+        } else {
+          video.play();
+          window.requestAnimationFrame(onTimeUpdate);
+        }
+    }
+    window.requestAnimationFrame(onTimeUpdate)
+    
+    Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+    get: function(){
+        return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
+      }
+    })
+    
+    const handleEnd = () => {
+      addSlider();
+    }
+    
+    const sliderClicked = () => {
+      toStart();
+      removeSlider();
+    }
+    
+    const addSlider = () => {
+      replay_bar.classList.add('slide-in');
+    }
+    
+    const removeSlider = () => {
+      replay_bar.classList.remove('slide-in');
+    }
+    
+    const toStart = () => {
+      // TODO - fade video out, change time, fade video back in //
+      video.pause();
+      video.currentTime = 0;
+      frame = 0;
+      window.requestAnimationFrame(onTimeUpdate)
+    }
+    
+//    video.addEventListener("timeupdate", function(){pauseAt(2, this)})
+    
+//    function checkPaused(v) {
+//      v.paused?v.play():v.pause();
+//    }
+    
+    // TODO
+    // Full screen on mobile
+    //      - detect if on mobile
+    //      - if so, do something
+    // touching and holding initiates carosel navigation (with video thumbnails) - scrolling left and right scrolls through frames. single tap on frame selects as current frame
+    // help menu that has animations for all behaviors -- tap to advance/replay, double tap to skip ahead/back, hold to initiate carosel
+    
+    //MAyBE
+    // on tap, confirm action with < or > symbol fading in. Confirm double tap with |< or >| fading in
+  </script>
+</body>
