@@ -16,7 +16,6 @@
       top: -25%;
       right: 10%;
 */
-      height: 640px;
       width: 360px;
     }
     .bottom {
@@ -66,8 +65,8 @@
     <div class="dtc-nsrelative">
 <!--      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">-->
       <div>
-        <div class="relative w5 h5 bg-black top overflow-hidden">
-          <video muted playsinline preload="auto" class="w-100 absolute" id="video">
+        <div class="relative w-100 mw6 center bg-black overflow-hidden">
+          <video muted playsinline preload="auto" class="w-100 relative" id="video">
             <source src="test.webm" type="video/webm" />
             <source src="test.mp4" type="video/mp4" />
           </video>
@@ -88,7 +87,7 @@
           <div class="w-100 absolute tc bottom-0" id="replay-bar">
             <a class="f5 link dim ph4 br4 pv3 mb2 dib black relative bottom-0 bg-white shadow-3 ma2 ba b--gray fw3" href="#0" onclick="sliderClicked();"><span class=" relative" style="bottom:-2px;">↩</span> Back to start</a>
           </div>
-        <p class="white f6 ma1 absolute w-100"><span class="b">c</span>Frame</p>
+<!--        <p class="white f6 ma1 absolute w-100"><span class="b">c</span>Frame</p>-->
         </div>
       </div>
     </div>
@@ -216,6 +215,10 @@
     //      - if so, do something
     // touching and holding initiates carosel navigation (with video thumbnails) - scrolling left and right scrolls through frames. single tap on frame selects as current frame
     // help menu that has animations for all behaviors -- tap to advance/replay, double tap to skip ahead/back, hold to initiate carosel
+    
+    // PROBLEMS
+    // Double tap to zoom on mobile sometimes fires
+    // Delay when skipping time in video....(on mobile)
     
     //MAyBE
     // on tap, confirm action with < or > symbol fading in. Confirm double tap with |< or >| fading in
