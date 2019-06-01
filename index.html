@@ -57,7 +57,27 @@
       transform: translateX(-50%);
     }
     .click-region {opacity: 0}
-    .click-region:hover {opacity: 1}
+/*    .click-region:hover {opacity: 1}*/
+    .circle {
+      stroke: #ffffff;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+/*      animation: progress 4s ease-out forwards;*/
+    }
+    .circle-box {
+      height: 2.2rem;
+      width: 2.2rem;
+    }
+    #current_frame {
+      padding-top: .2rem;
+    }
+    @keyframes progress {
+      0% {
+        stroke-dasharray: 0 100;
+      }
+    }
   </style>
 </head>
 <body class="w-100 center black-90 bg-white f5-ns f6 relative pa2 pa0-ns sans-serif">
@@ -84,8 +104,25 @@
               </div>
             </div>
           </div>
+          <div class="w-100 absolute tc bottom-0" id="">
+            <div class="white ma3">
+              <div class="dib v-mid relative tc circle-box">
+                <span class="f3 absolute w-100 tc" id="current_frame">0</span>
+                <svg viewBox="0 0 36 36" class="" transform="translate(0,0) scale(-1, 1)">
+                  <path class="circle" id="progress_circle"
+                    stroke-dasharray="100" stroke-dashoffset="100"
+                    d="M18 2.0845
+                      a 15.9155 15.9155 0 0 1 0 31.831
+                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                </svg>
+              </div>
+              <div class="w2 dib v-mid ">
+              <span class="bl v-mid"></span>
+              <span class="v-mid f3 fw3 pl2 ml1" id="final_frame">5</span></div></div>
+          </div>
           <div class="w-100 absolute tc bottom-0" id="replay-bar">
-            <a class="f5 link dim ph4 br4 pv3 mb2 dib black relative bottom-0 bg-white shadow-3 ma2 ba b--gray fw3" href="#0" onclick="sliderClicked();"><span class=" relative" style="bottom:-2px;">↩</span> Back to start</a>
+            <a class="f4 link ph4 br4 pv3 mb2 dib black relative bottom-0 bg-white shadow-3 ma2 fw3" href="#0" onclick="sliderClicked();">Back to start</a>
           </div>
 <!--        <p class="white f6 ma1 absolute w-100"><span class="b">c</span>Frame</p>-->
         </div>
@@ -96,6 +133,11 @@
     
     var video = document.getElementById('video');
     var replay_bar = document.getElementById('replay-bar');
+    var displayed_frame = document.getElementById('current_frame');
+    var final_frame = document.getElementById('final_frame');
+    var circle = document.getElementById('progress_circle');
+    
+    // whilte playing have number opacity 50% or something and progress bar moving
 
     var key = [
       {time: 0, type: "hold"},
@@ -107,10 +149,10 @@
     ]
 
     var frame = 0;
+    var previousFrame = 0;
     var ended = false;
     
     const advanceFrame = () => {
-//      if (video.playing) {return;}
       if (!inRange(frame)) {return;} // break if outside frame range
       else {
         let step = 1;
@@ -119,17 +161,15 @@
           video.currentTime = key[frame].time;
           window.requestAnimationFrame(onTimeUpdate);
         }
-        else {frame += step;}
+        else {previousFrame = frame; frame += step;}
+        changeDisplayedFrame(displayed_frame, frame);
       }
     }
     
     const decrementFrame = () => {
       let step = -1;
       let framechange = 0;
-      if (video.playing) {
-//        step = -2;
-        framechange = -1;
-      }
+      if (video.playing) {framechange = -1;}
       if (!inRange(frame + step)) {
         return;
       }
@@ -137,9 +177,15 @@
         if (finalFrame) {removeSlider();}
         video.pause();
         video.currentTime = key[frame + step].time;
+        previousFrame = frame + step;
         frame += framechange;
         window.requestAnimationFrame(onTimeUpdate);
+        changeDisplayedFrame(displayed_frame, frame);
       }
+    }
+    
+    const updateProgress = (v) => {
+      circle.style.strokeDashoffset = v;
     }
     
     const finalFrame = () => {
@@ -160,10 +206,14 @@
     const onTimeUpdate = () => {
         if (video.currentTime >= (key[frame].time - 0.05)) {
           video.pause();
+          updateProgress(0);
+          displayed_frame.style.opacity = "1";
           if (finalFrame()){handleEnd()}
           window.requestAnimationFrame(onTimeUpdate);
         } else {
           video.play();
+          updateProgress(getProgress(previousFrame, frame, video.currentTime));
+          displayed_frame.style.opacity = "0.5";
           window.requestAnimationFrame(onTimeUpdate);
         }
     }
@@ -174,6 +224,12 @@
         return !!(this.currentTime > 0 && !this.paused && !this.ended && this.readyState > 2);
       }
     })
+    
+    const getProgress = (lastFrame, nextFrame, currentTime) => {
+      let offsetTime = key[nextFrame].time - currentTime;
+      let timeDifference = Math.abs(key[nextFrame].time - key[lastFrame].time);
+      return 100 * (offsetTime / timeDifference);
+    }
     
     const handleEnd = () => {
       addSlider();
@@ -192,13 +248,23 @@
       replay_bar.classList.remove('slide-in');
     }
     
+    const changeDisplayedFrame = (object, f) => {
+      let displayedFrame = f;
+      while( object.firstChild ) {
+        object.removeChild( object.firstChild );
+      }
+      object.appendChild( document.createTextNode(displayedFrame.toString()) );
+    }
+    
     const toStart = () => {
-      // TODO - fade video out, change time, fade video back in //
       video.pause();
       video.currentTime = 0;
       frame = 0;
+      changeDisplayedFrame(displayed_frame, frame);
       window.requestAnimationFrame(onTimeUpdate)
     }
+    
+    changeDisplayedFrame(final_frame, key.length - 1);
     
 //    video.addEventListener("timeupdate", function(){pauseAt(2, this)})
     
@@ -207,22 +273,16 @@
 //    }
     
     // TODO
-    // Fix tap actions -- detect if single or double tap, then act accordingly
-    // Block actions until video is loaded
-    // Progressively load video (don't block beginning if not loaded)
+    // Block any tap until video is loaded
+    // Progressively load video ?? (don't block beginning if not loaded)
     // Full screen on mobile
     //      - detect if on mobile
-    //      - if so, do something
-    // Bleed areas on mobile -- video should bleed over visible area, but buttons are always sized to the screen
+    //      - if so, go full screen?
+    // Bleed areas on mobile -- video should bleed vertically (fit 100% horizontally), but buttons are always sized to the screen
     // touching and holding initiates carosel navigation (with video thumbnails) - scrolling left and right scrolls through frames. single tap on frame selects as current frame
     // help menu that has animations for all behaviors -- tap to advance/replay, double tap to skip ahead/back, hold to initiate carosel
     
-    // PROBLEMS
-    // Delay when skipping time in video....(on mobile)...the longer into the video, the more time it takes to change the frame
-    // Double tap to zoom on mobile sometimes fires
-    
     //MAyBE
-    // have show frame number in upper left corder ---- 3/15
     // on tap, confirm action with < or > symbol fading in. Confirm double tap with |< or >| fading in
   </script>
 </body>
