@@ -14,8 +14,10 @@
     }
 */
     #video {
-      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+/*
+      height: 100vh;  Fallback for browsers that do not support Custom Properties 
       height: calc(var(--vh, 1vh) * 100);
+*/
     }
     #replay-bar {
     height: 75px;
@@ -263,11 +265,13 @@
     changeDisplayedFrame(final_frame, key.length - 1);
     
     // Fix for viewport height
-    
-//    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-//    let vh = window.innerHeight * 0.01;
-//    // Then we set the value in the --vh custom property to the root of the document
-//    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    function calcVH() {
+    var vH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    document.getElementById("video").setAttribute("style", "height:" + vH + "px;");
+    }
+    calcVH();
+    window.addEventListener('onorientationchange', calcVH, true);
+    window.addEventListener('resize', calcVH, true);
     
 //    video.addEventListener("timeupdate", function(){pauseAt(2, this)})
     
