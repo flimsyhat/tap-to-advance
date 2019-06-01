@@ -62,7 +62,7 @@
 </head>
 <body class="w-100 center black-90 bg-white f5-ns f6 relative pa2 pa0-ns sans-serif">
   <div class="center w-100 dt-ns vh-100-ns">
-    <div class="dtc-nsrelative">
+    <div class="dtc-ns v-mid relative">
 <!--      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">-->
       <div>
         <div class="relative w-100 mw6 center bg-black overflow-hidden">
@@ -136,7 +136,7 @@
       else {
         if (finalFrame) {removeSlider();}
         video.pause();
-        video.currentTime = 5;
+        video.currentTime = key[frame + step].time;
         frame += framechange;
         window.requestAnimationFrame(onTimeUpdate);
       }
@@ -218,11 +218,11 @@
     // help menu that has animations for all behaviors -- tap to advance/replay, double tap to skip ahead/back, hold to initiate carosel
     
     // PROBLEMS
-    // Delay when skipping time in video....(on mobile)
+    // Delay when skipping time in video....(on mobile)...the longer into the video, the more time it takes to change the frame
     // Double tap to zoom on mobile sometimes fires
     
     //MAyBE
-    // have show frame number, pagination indicator (with circles), something
+    // have show frame number in upper left corder ---- 3/15
     // on tap, confirm action with < or > symbol fading in. Confirm double tap with |< or >| fading in
   </script>
 </body>
