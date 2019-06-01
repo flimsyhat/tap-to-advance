@@ -13,6 +13,10 @@
       width: 50%;
     }
 */
+    #video {
+      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+      height: calc(var(--vh, 1vh) * 100);
+    }
     #replay-bar {
     height: 75px;
     transform: translateY(100%);
@@ -78,7 +82,7 @@
 <!--      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">-->
       <div>
         <div class="center bg-black overflow-hidden relative">
-          <video muted playsinline preload="auto" class="vh-100 relative" id="video">
+          <video muted playsinline preload="auto" class="relative" id="video">
             <source src="test.webm" type="video/webm" />
             <source src="test.mp4" type="video/mp4" />
           </video>
@@ -257,6 +261,13 @@
     }
     
     changeDisplayedFrame(final_frame, key.length - 1);
+    
+    // Fix for viewport height
+    
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
     
 //    video.addEventListener("timeupdate", function(){pauseAt(2, this)})
     
