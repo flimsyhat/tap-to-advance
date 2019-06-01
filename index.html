@@ -7,6 +7,7 @@
   <meta name="description" content="">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="tachyons.css">
+  <script src="screenfull.js"></script>
   <style>
     #video {
 /*      height: 100vh;*/
@@ -53,7 +54,6 @@
       stroke-width: 2;
       stroke-linecap: round;
       stroke-dasharray: 100;
-/*      animation: progress 4s ease-out forwards;*/
     }
     .circle-box {
       height: 2.2rem;
@@ -93,6 +93,7 @@
               </div>
             </div>
           </div>
+          <div class="absolute w3 h3 bg-white top right" id="fullscreen"></div>
           <div class="absolute tc bottom-0 w-100" id="">
             <div class="white ma3">
               <div class="dib v-mid relative tc circle-box">
@@ -113,7 +114,6 @@
           <div class="w-100 absolute tc bottom-0" id="replay-bar">
             <a class="f4 link ph4 br4 pv3 mb2 dib black relative bottom-0 bg-white shadow-3 ma2 fw3" href="#0" onclick="sliderClicked();">Back to start</a>
           </div>
-<!--        <p class="white f6 ma1 absolute w-100"><span class="b">c</span>Frame</p>-->
         </div>
       </div>
     </div>
@@ -142,15 +142,16 @@
     var ended = false;
     
     const advanceFrame = () => {
-      if (!inRange(frame)) {return;} // break if outside frame range
+      let step = 1;
+      if (!inRange(frame + step)) {return;} // break if outside frame range
       else {
-        let step = 1;
         if (video.playing) {
           video.pause();
+          console.log("test-2")
           video.currentTime = key[frame].time;
-          window.requestAnimationFrame(onTimeUpdate);
         }
         else {previousFrame = frame; frame += step;}
+        window.requestAnimationFrame(onTimeUpdate);
         changeDisplayedFrame(displayed_frame, frame);
       }
     }
@@ -188,7 +189,7 @@
     }
     
     const inRange = (f) => {
-      if (f < key.length-1 && f >= 0) {return true;}
+      if (f <= key.length-1 && f >= 0) {return true;}
       else {return false;}
     }
     
@@ -198,7 +199,6 @@
           updateProgress(0);
           displayed_frame.style.opacity = "1";
           if (finalFrame()){handleEnd()}
-          window.requestAnimationFrame(onTimeUpdate);
         } else {
           video.play();
           updateProgress(getProgress(previousFrame, frame, video.currentTime));
@@ -263,6 +263,15 @@
     calcVH();
     window.addEventListener('onorientationchange', calcVH, true);
     window.addEventListener('resize', calcVH, true);
+    
+    document.getElementById('fullscreen').addEventListener('click', () => {
+      if (screenfull.enabled) {
+          screenfull.request();
+      } else {
+        console.log("test")
+          // Ignore or do something else
+      }
+    });
     
 //    video.addEventListener("timeupdate", function(){pauseAt(2, this)})
     
