@@ -199,7 +199,7 @@
     }
     
     const inRange = (f) => {
-      if (f <= key.length && f >= 0) {return true;}
+      if (f < key.length-1 && f >= 0) {return true;}
       else {return false;}
     }
     
