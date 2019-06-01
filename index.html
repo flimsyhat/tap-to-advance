@@ -9,9 +9,11 @@
   <link rel="stylesheet" href="tachyons.css">
   <script src="screenfull.js"></script>
   <style>
+/*
     #video {
-/*      height: 100vh;*/
+      height: 100vh;
     }
+*/
     #replay-bar {
     height: 75px;
     transform: translateY(100%);
@@ -70,14 +72,14 @@
   </style>
 </head>
 <body class="w-100 center black-90 bg-white f5-ns f6 relative sans-serif">
-  <div class="dt center">
-    <div class="dt relative">
+  <div class="dt center vh-100 relative">
+    <div class="dtc v-mid relative">
 <!--      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">-->
       <div>
-        <div class="center bg-black overflow-hidden relative">
-          <video muted playsinline preload="auto" class="relative" id="video">
-            <source src="test.webm" type="video/webm" />
-            <source src="test.mp4" type="video/mp4" />
+        <div class="center bg-black mw6 overflow-hidden relative w-100">
+          <video muted playsinline preload="auto" class="w-100" id="video">
+            <source src="3by4.webm" type="video/webm" />
+            <source src="3by4.mp4" type="video/mp4" />
           </video>
           <div class="click-region absolute right" onclick="advanceFrame(1);">
             <div class="flex items-center h-100 fr">
@@ -93,7 +95,7 @@
               </div>
             </div>
           </div>
-          <div class="absolute w3 h3 bg-white top right" id="fullscreen"></div>
+<!--          <div class="absolute w3 h3 bg-white top right" id="fullscreen"></div>-->
           <div class="absolute tc bottom-0 w-100" id="">
             <div class="white ma3">
               <div class="dib v-mid relative tc circle-box">
@@ -256,22 +258,22 @@
     changeDisplayedFrame(final_frame, key.length - 1);
     
     // Fix for viewport height
-    function calcVH() {
-    var vH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-    document.getElementById("video").setAttribute("style", "height:" + vH + "px;");
-    }
-    calcVH();
-    window.addEventListener('onorientationchange', calcVH, true);
-    window.addEventListener('resize', calcVH, true);
+//    function calcVH() {
+//    var vH = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+//    document.getElementById("video").setAttribute("style", "height:" + vH + "px;");
+//    }
+//    calcVH();
+//    window.addEventListener('onorientationchange', calcVH, true);
+//    window.addEventListener('resize', calcVH, true);
     
-    document.getElementById('fullscreen').addEventListener('click', () => {
-      if (screenfull.enabled) {
-          screenfull.request();
-      } else {
-        console.log("test")
-          // Ignore or do something else
-      }
-    });
+//    document.getElementById('fullscreen').addEventListener('click', () => {
+//      if (screenfull.enabled) {
+//          screenfull.request();
+//      } else {
+//        console.log("test")
+//          // Ignore or do something else
+//      }
+//    });
     
 //    video.addEventListener("timeupdate", function(){pauseAt(2, this)})
     
