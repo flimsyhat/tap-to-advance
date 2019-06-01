@@ -8,20 +8,11 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="tachyons.css">
   <style>
-    .large-shadow {
-      box-shadow: 0 80px 100px 0px rgba(88, 88, 88, 0.87);
-    }
-    .top {
 /*
-      top: -25%;
-      right: 10%;
+    .videobox {
+      width: 50%;
+    }
 */
-      width: 360px;
-    }
-    .bottom {
-      height: 480px;
-      width: 300px;
-    }
     #replay-bar {
     height: 75px;
     transform: translateY(100%);
@@ -81,30 +72,30 @@
   </style>
 </head>
 <body class="w-100 center black-90 bg-white f5-ns f6 relative pa2 pa0-ns sans-serif">
-  <div class="center w-100 dt-ns vh-100-ns">
-    <div class="dtc-ns v-mid relative">
+  <div class="dt center">
+    <div class="dtc relative">
 <!--      <div class="w5 pr5 pr0-ns center-ns large-shadow bottom">-->
       <div>
-        <div class="relative w-100 mw6 center bg-black overflow-hidden">
-          <video muted playsinline preload="auto" class="w-100 relative" id="video">
+        <div class="center bg-black overflow-hidden videobox">
+          <video muted playsinline preload="auto" class="vh-100 relative" id="video">
             <source src="test.webm" type="video/webm" />
             <source src="test.mp4" type="video/mp4" />
           </video>
-          <div class="click-region right" onclick="advanceFrame(1);">
+          <div class="click-region absolute right" onclick="advanceFrame(1);">
             <div class="flex items-center h-100 fr">
               <div class="bg-white h3 w3 br-100 button-right">
                 <p class="w-100 tl pl2 f4">→</p>
               </div>
             </div>
           </div>
-          <div class="click-region left" onclick="decrementFrame();">
+          <div class="click-region absolute left" onclick="decrementFrame();">
             <div class="flex items-center h-100 fl">
               <div class="bg-white h3 w3 br-100 button-left">
                 <p class="w-100 tr pr2 f4">←</p>
               </div>
             </div>
           </div>
-          <div class="w-100 absolute tc bottom-0" id="">
+          <div class="absolute tc bottom-0 w-100" id="">
             <div class="white ma3">
               <div class="dib v-mid relative tc circle-box">
                 <span class="f3 absolute w-100 tc" id="current_frame">0</span>
