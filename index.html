@@ -199,12 +199,12 @@
         if (video.currentTime >= (key[frame].time - 0.05)) {
           video.pause();
           updateProgress(0);
-          displayed_frame.style.opacity = "1";
+//          displayed_frame.style.opacity = "1";
           if (finalFrame()){handleEnd()}
         } else {
           video.play();
           updateProgress(getProgress(previousFrame, frame, video.currentTime));
-          displayed_frame.style.opacity = "0.5";
+//          displayed_frame.style.opacity = "0.5";
           window.requestAnimationFrame(onTimeUpdate);
         }
     }
@@ -282,16 +282,13 @@
 //    }
     
     // TODO
-    // Block any tap until video is loaded
+    // Block any action until video is loaded
     // Progressively load video ?? (don't block beginning if not loaded)
-    // Full screen on mobile
-    //      - detect if on mobile
-    //      - if so, go full screen?
-    // Bleed areas on mobile -- video should bleed vertically (fit 100% horizontally), but buttons are always sized to the screen
     // touching and holding initiates carosel navigation (with video thumbnails) - scrolling left and right scrolls through frames. single tap on frame selects as current frame
     // help menu that has animations for all behaviors -- tap to advance/replay, double tap to skip ahead/back, hold to initiate carosel
     
     //MAyBE
+    // use arrow keys to play on desktop
     // on tap, confirm action with < or > symbol fading in. Confirm double tap with |< or >| fading in
   </script>
 </body>
