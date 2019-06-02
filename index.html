@@ -15,7 +15,6 @@
     }
 */
     #replay-bar {
-    height: 70px;
     transform: translateY(100%);
     -webkit-transform: translateY(100%);
     }
@@ -69,6 +68,11 @@
         stroke-dasharray: 0 100;
       }
     }
+    .replay-circle {
+      width: 5rem;
+      height: 5rem;
+      padding: .7rem;
+    }
   </style>
 </head>
 <body class="w-100 center black-90 bg-white f5-ns pa2-ns f6 relative sans-serif">
@@ -95,7 +99,7 @@
             </div>
           </div>
 <!--          <div class="absolute w3 h3 bg-white top right" id="fullscreen"></div>-->
-          <div class="absolute tc bottom-0 w-100" id="">
+          <div class="absolute tc bottom-0 w-100" id="pagination">
             <div class="white ma2">
               <div class="dib v-mid relative tc circle-box">
                 <span class="f3 absolute w-100 tc" id="current_frame">0</span>
@@ -113,7 +117,9 @@
               <span class="v-mid f3 fw3 pl2 ml1" id="final_frame">5</span></div></div>
           </div>
           <div class="w-100 absolute tc bottom-0" id="replay-bar">
-            <a class="f4 link ph4 br4 pv3 mb2 dib black relative bottom-0 bg-white shadow-3 ma2 fw3" href="#0" onclick="sliderClicked();">Back to start</a>
+            <a class="dib black relative pa3 br-100 bottom-0 bg-black ba b--white shadow-3 ma2 replay-circle" href="#0" onclick="sliderClicked();">
+              <img src="replay.svg" class="w-100 relative" style="">
+            </a>
           </div>
         </div>
       </div>
@@ -126,6 +132,7 @@
     var displayed_frame = document.getElementById('current_frame');
     var final_frame = document.getElementById('final_frame');
     var circle = document.getElementById('progress_circle');
+    var pagination = document.getElementById('pagination');
     
     // whilte playing have number opacity 50% or something and progress bar moving
 
@@ -231,10 +238,12 @@
     }
     
     const addSlider = () => {
+      pagination.style.opacity = "0";
       replay_bar.classList.add('slide-in');
     }
     
     const removeSlider = () => {
+      pagination.style.opacity = "1";
       replay_bar.classList.remove('slide-in');
     }
     
