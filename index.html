@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang = "en">
 <head>
-  <title>cFrame</title>
+  <title>tap-to-advance</title>
   <meta charset = "UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
@@ -75,9 +75,9 @@
     }
   </style>
 </head>
-<body class="w-100 center black-90 bg-white f5-ns pa2-ns f6 relative sans-serif">
-  <div class="dt center vh-100 relative">
-    <div class="dtc v-mid-ns relative">
+<body class="w-100 center black-90 bg-white f5-ns pa2-ns pa3-l f6 relative sans-serif">
+  <div class="dt relative center ma0-l">
+    <div class="relative fr-l">
       <div>
         <div class="center bg-black mw6 overflow-hidden relative w-100 br3-ns">
           <video muted playsinline preload="auto" class="w-100" id="video">
@@ -99,7 +99,7 @@
             </div>
           </div>
 <!--          <div class="absolute w3 h3 bg-white top right" id="fullscreen"></div>-->
-          <div class="absolute tc bottom-0 w-100" id="pagination">
+          <div class="absolute tr pr1 top-0 w-100" id="pagination">
             <div class="white ma2">
               <div class="dib v-mid relative tc circle-box">
                 <span class="f3 absolute w-100 tc" id="current_frame">0</span>
@@ -112,7 +112,7 @@
                   />
                 </svg>
               </div>
-              <div class="w2 dib v-mid ">
+              <div class="w2 dib v-mid">
               <span class="bl v-mid"></span>
               <span class="v-mid f3 fw3 pl2 ml1" id="final_frame">5</span></div></div>
           </div>
@@ -124,6 +124,14 @@
         </div>
       </div>
     </div>
+    <div class="mw5 fl-l w-100 relative w-100 center pa2 pt3 pb3 pt1-l pr3-l mr2-l" id="instructions">
+          <p class="ma0 tc pa2 w-100 mw5">Tap the right side <span class="b">once</span> to play the next animation.</p>
+          <div class="pa2 w-100 mw5 center mt2"><img src="play.svg"></div>
+          <p class="ma0 tc pa2 w-100 mt3-ns">Tap the left side <span class="b">once</span> to replay the animation.</p>
+          <div class="pa2 w-100 mw5 center mt2"><img src="loop.svg"></div>
+          <p class="ma0 tc pa2 w-100 mt3-ns">Tap the right or left side <span class="b">twice</span> to skip forward or backward.</p>
+          <div class="pa2 w-100 mw5 center mt2"><img src="double-tap.svg"></div>
+        </div>
   </div>
   <script>
     
@@ -133,6 +141,7 @@
     var final_frame = document.getElementById('final_frame');
     var circle = document.getElementById('progress_circle');
     var pagination = document.getElementById('pagination');
+    var instructions = document.getElementById('instructions');
     
     // whilte playing have number opacity 50% or something and progress bar moving
 
@@ -205,12 +214,10 @@
         if (video.currentTime >= (key[frame].time - 0.05)) {
           video.pause();
           updateProgress(0);
-//          displayed_frame.style.opacity = "1";
           if (finalFrame()){handleEnd()}
         } else {
           video.play();
           updateProgress(getProgress(previousFrame, frame, video.currentTime));
-//          displayed_frame.style.opacity = "0.5";
           window.requestAnimationFrame(onTimeUpdate);
         }
     }
@@ -238,12 +245,12 @@
     }
     
     const addSlider = () => {
-      pagination.style.opacity = "0";
+//      pagination.style.opacity = "0";
       replay_bar.classList.add('slide-in');
     }
     
     const removeSlider = () => {
-      pagination.style.opacity = "1";
+//      pagination.style.opacity = "1";
       replay_bar.classList.remove('slide-in');
     }
     
@@ -264,6 +271,10 @@
     }
     
     changeDisplayedFrame(final_frame, key.length - 1);
+    
+//    function toggleInstructions() {
+//      instructions.classList.contains('o-0')?instructions.classList.remove('o-0'):instructions.classList.add('o-0');
+//    }
     
     // Fix for viewport height
 //    function calcVH() {
@@ -288,6 +299,8 @@
 //    function checkPaused(v) {
 //      v.paused?v.play():v.pause();
 //    }
+    
+    
     
     // TODO
     // Block any action until video is loaded
